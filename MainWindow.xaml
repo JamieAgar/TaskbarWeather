@@ -3,8 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:uc="clr-namespace:TaskbarWeather.UserControls"
+        xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d" Name="mainWindow"
-        Title="MainWindow" Height="200" Width="540" Background="Transparent" 
+        Title="MainWindow" Height="240" Width="545" Background="Transparent" 
         Activated="Window_Activated"
         Deactivated="Window_Deactivated"
         ShowInTaskbar="False"
@@ -54,11 +56,28 @@
                             <ColumnDefinition Width="auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="textHint" MouseDown="textHint_MouseDown" Text="Search..." Style="{StaticResource textHint}"/>
-                        <TextBox x:Name="textSearch" TextChanged="textSearch_TextChanged" Style="{StaticResource textBox}"/>
+                        <TextBlock x:Name="textSearch" MouseDown="textSearch_MouseDown" Text="Search..." Style="{StaticResource textHint}"/>
+                        <TextBox x:Name="txtSearch" TextChanged="txtSearch_TextChanged" Style="{StaticResource textBox}" KeyDown="txtSearch_KeyDown" GotFocus="txtSearch_GotFocus"/>
                     </Grid>
                 </Border>
                 <StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <StackPanel.Resources>
+                            <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type ToggleButton}}">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Margin" Value="1"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <CheckBox x:Name="Favourites1" Height="24" Width="24" Checked="Favourites1_Checked" Unchecked="Favourites_Unchecked" Template="{DynamicResource CheckBoxNoHighlight}"/>
+                        <CheckBox x:Name="Favourites2" Height="24" Width="24" Checked="Favourites2_Checked" Unchecked="Favourites_Unchecked" Template="{DynamicResource CheckBoxNoHighlight}"/>
+                        <CheckBox x:Name="Favourites3" Height="24" Width="24" Checked="Favourites3_Checked" Unchecked="Favourites_Unchecked" Template="{DynamicResource CheckBoxNoHighlight}"/>
+                        <Button x:Name="StarButton" Height="24" Width="24" Click="Star_Clicked" Background="Transparent" BorderBrush="Transparent">
+                            <Image Source="/Resources/star.png" />
+                        </Button>
+                        <Button x:Name="DeleteButton" Height="24" Width="24" Click="Delete_Clicked" Background="Transparent" BorderBrush="Transparent" Visibility="Collapsed">
+                            <Image Source="/Resources/delete.png" Margin="2"/>
+                        </Button>
+                    </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <Image x:Name="WeatherIcon" Source="/Resources/WeatherIcons/sun_cloud.png" Width="24"/>
                         <TextBlock x:Name="TemperatureLabel"  Text="0" FontSize="32" HorizontalAlignment="Center"/>
@@ -111,12 +130,23 @@
 
                 <!-- Today -->
                 <StackPanel HorizontalAlignment="Left" Name="TodayForecast" Visibility="Collapsed">
-                    
+                    <Label Content="Hourly Forecast"/>
+                    <uc:HourlyTemperatureGraph Height="140" Width="370" SeriesCollection="{Binding Path=WindowSeriesCollection, ElementName=mainWindow}" Labels="{Binding Path=WindowLabels, ElementName=mainWindow}"/>
                 </StackPanel>
 
                 <!-- Week Days -->
                 <StackPanel HorizontalAlignment="Left" Name="WeekForecast" Visibility="Visible">
-                    
+                    <StackPanel Orientation="Horizontal" Margin="10 0 0 5">
+                        <uc:CardDay Day="Sun" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                        <uc:CardDay Day="Mon" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                        <uc:CardDay Day="Tue" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                        <uc:CardDay Day="Thu" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="10 0 0 5" HorizontalAlignment="Center">
+                        <uc:CardDay Day="Fri" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                        <uc:CardDay Day="Wed" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                        <uc:CardDay Day="Sat" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                    </StackPanel>
                 </StackPanel>
 
             </StackPanel>
