@@ -37,7 +37,7 @@ namespace TaskbarWeather
         }
         public static readonly DependencyProperty WindowLabelsProperty = DependencyProperty.Register("WindowLabels", typeof(string[]), typeof(MainWindow));
 
-        private readonly string appid = APIKeys.WeatherAPIKey;
+        private readonly string appid;
 
         public MainWindow()
         {
@@ -73,6 +73,17 @@ namespace TaskbarWeather
                 }
             };
             WindowLabels = new[] {"2am", "3am", "4am", "5am", "6am", "7am", "8am", "9am", "10am", "11am", "12am", "1am" };
+
+            try
+            {
+                appid = APIKeys.WeatherAPIKey;
+            } 
+            catch (Exception ex)
+            {
+                Console.WriteLine("Missing value for 'WeatherAPIKey' in APIKeys.cs");
+                appid = "missing";
+                ex.ToString();
+            }
 
             WeatherAPICaller.InitializeClient();
             //Need to pass the appid to the API caller
