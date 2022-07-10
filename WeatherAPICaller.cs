@@ -14,15 +14,13 @@ namespace TaskbarWeather
         public static void InitializeClient()
         {
             ApiClient = new HttpClient();
-            ApiClient.BaseAddress = new Uri("https://api.openweathermap.org/data/2.5/");
+            //No longer use BaseAddress as I'm using multiple different APIs with different URLs
+            //ApiClient.BaseAddress = new Uri("https://api.openweathermap.org/data/2.5/");
 
             //This tells us we are specifically looking for json instead of a webpage
             ApiClient.DefaultRequestHeaders.Accept.Clear();
             ApiClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
-
-
-
 
     }
 }

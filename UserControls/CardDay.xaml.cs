@@ -39,6 +39,12 @@ namespace TaskbarWeather.UserControls
             set { SetValue(SourceProperty, value); }
         }
         public static readonly DependencyProperty SourceProperty = DependencyProperty.Register("Source", typeof(ImageSource), typeof(CardDay));
+        public string SourceToolTip
+        {
+            get { return (string)GetValue(SourceToolTipProperty); }
+            set { SetValue(SourceToolTipProperty, value); }
+        }
+        public static readonly DependencyProperty SourceToolTipProperty = DependencyProperty.Register("SourceToolTip", typeof(string), typeof(CardDay));
 
     }
 }

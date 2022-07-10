@@ -21,16 +21,13 @@
         <StackPanel>
             <TextBlock Text="{Binding Path=Day,ElementName=cardDay}" TextAlignment="Center" FontSize="14" FontWeight="SemiBold"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 5 0 5">
-                <Image Source="{Binding Path=Source,ElementName=cardDay}" Width="30"/>
+                <Image Source="{Binding Path=Source,ElementName=cardDay}" ToolTip="{Binding Path=SourceToolTipm, ElementName=cardDay}" Width="30"/>
                 <StackPanel Margin="5 0 0 0">
                     <TextBlock Text="{Binding Path=MaxNum,ElementName=cardDay}" TextAlignment="Center" FontWeight="SemiBold" Margin="0 0 8 5"/>
                     <TextBlock Text="{Binding Path=MinNum,ElementName=cardDay}" TextAlignment="Center" FontWeight="SemiBold" Foreground="#7a7a7a"/>
                 </StackPanel>
             </StackPanel>
         </StackPanel>
-
-
-
 
     </Border>
 </UserControl>

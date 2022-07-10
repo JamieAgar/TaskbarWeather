@@ -75,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="APIKeys.cs" />
+    <Compile Include="Models\CurrentWeatherModels\WeekWeatherModel.cs" />
     <Compile Include="Models\CurrentWeatherModels\CurrentWeatherModel.cs" />
     <Compile Include="UserControls\CardDay.xaml.cs">
       <DependentUpon>CardDay.xaml</DependentUpon>

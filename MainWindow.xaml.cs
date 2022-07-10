@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Net;
 using System.IO;
+using System.Windows.Controls;
+using TaskbarWeather.UserControls;
 
 namespace TaskbarWeather
 {
@@ -37,7 +39,9 @@ namespace TaskbarWeather
         }
         public static readonly DependencyProperty WindowLabelsProperty = DependencyProperty.Register("WindowLabels", typeof(string[]), typeof(MainWindow));
 
-        private readonly string appid;
+        private readonly string OpenWeatherAppid;
+        private readonly string WeatherBitAppid;
+        private readonly string AccuWeatherAppid;
 
         public MainWindow()
         {
@@ -76,12 +80,16 @@ namespace TaskbarWeather
 
             try
             {
-                appid = APIKeys.WeatherAPIKey;
+                OpenWeatherAppid = APIKeys.OpenWeatherAPIKey;
+                WeatherBitAppid = APIKeys.WeatherBitAPIKey;
+                AccuWeatherAppid = APIKeys.AccuWeatherAPIKey;
             } 
             catch (Exception ex)
             {
                 Console.WriteLine("Missing value for 'WeatherAPIKey' in APIKeys.cs");
-                appid = "missing";
+                OpenWeatherAppid = "missing";
+                WeatherBitAppid = "missing";
+                AccuWeatherAppid = "missing";
                 ex.ToString();
             }
 
@@ -105,6 +113,7 @@ namespace TaskbarWeather
             Show_Window(coor.X);
 
             GetCurrentWeather();
+            GetWeekWeather();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
@@ -190,6 +199,10 @@ namespace TaskbarWeather
             if(e.Key == System.Windows.Input.Key.Enter)
             {
                 GetCurrentWeather(txtSearch.Text);
+                GetWeekWeather(txtSearch.Text);
+
+                //No need to do an API call if we are already displaying this location
+                curLocation = txtSearch.Text;
             }
         }
         private void txtSearch_GotFocus(object sender, RoutedEventArgs e)
@@ -208,39 +221,17 @@ namespace TaskbarWeather
         {
             //No need to do an API call if we are already displaying this location
             if (location == curLocation) return;
-            curLocation = location;
 
-            var currentWeather = await WeatherProcessor.GetCurrentWeather(appid, location);
+            var currentWeather = await WeatherProcessor.GetCurrentWeather(OpenWeatherAppid, location);
             LocationLabel.Text = currentWeather.name;
             TemperatureLabel.Text = Math.Round(currentWeather.main.temp).ToString();
             WindLabel.Text = Math.Round(currentWeather.wind.speed).ToString() + "m/s";
             HumidityLabel.Text = currentWeather.main.humidity + "%";
-            WeatherIcon.Source = GetWeatherIconImage(currentWeather.weather[0].icon);
-
-            //Can't use switch statement as not available in framework 4.7.2
-            if (currentWeather.clouds.all > 84)
-            {
-                CloudinessLabel.Text = "Overcast Clouds";
-            }
-            else if (currentWeather.clouds.all > 50)
-            {
-                CloudinessLabel.Text = "Broken Clouds";
-            }
-            else if (currentWeather.clouds.all > 24)
-            {
-                CloudinessLabel.Text = "Scattered Clouds";
-            }
-            else if (currentWeather.clouds.all > 10)
-            {
-                CloudinessLabel.Text = "Few Clouds";
-            } 
-            else
-            {
-                CloudinessLabel.Text = "Clear Sky";
-            }
+            WeatherIcon.Source = GetWeatherIconImage(currentWeather.weather[0].icon + "@2x", "http://openweathermap.org/img/wn/");
+            CloudinessLabel.Text = currentWeather.weather[0].description;
         }
 
-        public BitmapImage GetWeatherIconImage(string icon)
+        public BitmapImage GetWeatherIconImage(string icon, string url)
         {
             using (WebClient client = new WebClient())
             {
@@ -249,11 +240,44 @@ namespace TaskbarWeather
                     return new BitmapImage(new Uri(Path.GetTempPath() + icon + ".png"));
                 }
 
-                client.DownloadFile("http://openweathermap.org/img/wn/" + icon + "@2x.png",
+                client.DownloadFile(url + icon + ".png",
                     Path.GetTempPath() + icon + ".png");
                 return new BitmapImage(new Uri(Path.GetTempPath() + icon + ".png"));
             }
 
+        }
+
+        private async Task GetWeekWeather(string location = "London")
+        {
+            //No need to do an API call if we are already displaying this location
+            if (location == curLocation) return;
+
+            var weekWeather = await WeatherProcessor.GetWeekWeather(WeatherBitAppid, location);
+
+            //Iterate through all the card days, first find them via the name then change their text
+            StackPanel cardDayContainer = WeekForecast;
+            for(int i = 0; i < 7; i++)
+            {
+                CardDay cardDay = (CardDay)cardDayContainer.FindName("Day" + i);
+                if(cardDay != null)
+                {
+                    var data = weekWeather.data[i];
+
+                    //Convert UNIX timestamp to DateTime
+                    DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                    dateTime = dateTime.AddSeconds(data.ts).ToLocalTime();
+
+                    cardDay.Day = dateTime.DayOfWeek.ToString().Substring(0, 3);
+                    cardDay.MinNum = Math.Round(data.min_temp).ToString() + "°C";
+                    cardDay.MaxNum = Math.Round(data.max_temp).ToString() + "°C";
+                    cardDay.Source = GetWeatherIconImage(data.weather.icon, "https://www.weatherbit.io/static/img/icons/");
+                    cardDay.ToolTip = data.weather.description;
+                }
+                else
+                {
+                    Console.WriteLine("Did not find day" + i);
+                }
+            }
         }
 
         #endregion
