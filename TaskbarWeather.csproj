@@ -74,12 +74,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="APIKeys.cs" />
+    <Compile Include="Models\CurrentWeatherModels\CurrentWeatherModel.cs" />
     <Compile Include="UserControls\CardDay.xaml.cs">
       <DependentUpon>CardDay.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\HourlyTemperatureGraph.xaml.cs">
       <DependentUpon>HourlyTemperatureGraph.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WeatherIconAPICaller.cs" />
+    <Compile Include="WeatherAPICaller.cs" />
+    <Compile Include="WeatherProcessor.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

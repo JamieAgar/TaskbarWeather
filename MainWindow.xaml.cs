@@ -37,6 +37,8 @@ namespace TaskbarWeather
         }
         public static readonly DependencyProperty WindowLabelsProperty = DependencyProperty.Register("WindowLabels", typeof(string[]), typeof(MainWindow));
 
+        private readonly string appid = APIKeys.WeatherAPIKey;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -71,6 +73,9 @@ namespace TaskbarWeather
                 }
             };
             WindowLabels = new[] {"2am", "3am", "4am", "5am", "6am", "7am", "8am", "9am", "10am", "11am", "12am", "1am" };
+
+            WeatherAPICaller.InitializeClient();
+            //Need to pass the appid to the API caller
         }
 
         //Handles displaying the window
@@ -87,6 +92,8 @@ namespace TaskbarWeather
             Activate();
             var coor = GetMousePositionWindowsForms();
             Show_Window(coor.X);
+
+            GetCurrentWeather();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
@@ -171,7 +178,7 @@ namespace TaskbarWeather
         {
             if(e.Key == System.Windows.Input.Key.Enter)
             {
-                //TODO: Make API call
+                GetCurrentWeather(txtSearch.Text);
             }
         }
         private void txtSearch_GotFocus(object sender, RoutedEventArgs e)
@@ -184,6 +191,59 @@ namespace TaskbarWeather
         #region API
         //https://openweathermap.org/current - Today
         //https://openweathermap.org/forecast16 - Week (can set cnt to 7)
+
+        private string curLocation = "";
+        private async Task GetCurrentWeather(string location = "London")
+        {
+            //No need to do an API call if we are already displaying this location
+            if (location == curLocation) return;
+            curLocation = location;
+
+            var currentWeather = await WeatherProcessor.GetCurrentWeather(appid, location);
+            LocationLabel.Text = currentWeather.name;
+            TemperatureLabel.Text = Math.Round(currentWeather.main.temp).ToString();
+            WindLabel.Text = Math.Round(currentWeather.wind.speed).ToString() + "m/s";
+            HumidityLabel.Text = currentWeather.main.humidity + "%";
+            WeatherIcon.Source = GetWeatherIconImage(currentWeather.weather[0].icon);
+
+            //Can't use switch statement as not available in framework 4.7.2
+            if (currentWeather.clouds.all > 84)
+            {
+                CloudinessLabel.Text = "Overcast Clouds";
+            }
+            else if (currentWeather.clouds.all > 50)
+            {
+                CloudinessLabel.Text = "Broken Clouds";
+            }
+            else if (currentWeather.clouds.all > 24)
+            {
+                CloudinessLabel.Text = "Scattered Clouds";
+            }
+            else if (currentWeather.clouds.all > 10)
+            {
+                CloudinessLabel.Text = "Few Clouds";
+            } 
+            else
+            {
+                CloudinessLabel.Text = "Clear Sky";
+            }
+        }
+
+        public BitmapImage GetWeatherIconImage(string icon)
+        {
+            using (WebClient client = new WebClient())
+            {
+                if (File.Exists(Path.GetTempPath() + icon + ".png"))
+                {
+                    return new BitmapImage(new Uri(Path.GetTempPath() + icon + ".png"));
+                }
+
+                client.DownloadFile("http://openweathermap.org/img/wn/" + icon + "@2x.png",
+                    Path.GetTempPath() + icon + ".png");
+                return new BitmapImage(new Uri(Path.GetTempPath() + icon + ".png"));
+            }
+
+        }
 
         #endregion
 
@@ -202,6 +262,7 @@ namespace TaskbarWeather
             if(Favourite1.Length > 0)
             {
                 ReplaceStarWithDelete();
+                GetCurrentWeather(Favourite1);
             }
             else
             {
@@ -219,6 +280,7 @@ namespace TaskbarWeather
             if (Favourite2.Length > 0)
             {
                 ReplaceStarWithDelete();
+                GetCurrentWeather(Favourite2);
             }
             else
             {
@@ -236,6 +298,7 @@ namespace TaskbarWeather
             if (Favourite3.Length > 0)
             {
                 ReplaceStarWithDelete();
+                GetCurrentWeather(Favourite3);
             }
             else
             {
