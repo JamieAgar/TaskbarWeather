@@ -118,7 +118,7 @@
         </Border>
 
         <!-- Right Side -->
-        <Border CornerRadius="0 30 30 0" Grid.Column="1" Background="#f6f6f6" MouseDown="Border_MouseDown">
+        <Border CornerRadius="0 30 30 0" Grid.Column="1" Background="#f6f6f6">
             <StackPanel>
                 <!-- Top Menu -->
                 <Grid Margin="10 10 20 10">
@@ -131,7 +131,7 @@
                 <!-- Today -->
                 <StackPanel HorizontalAlignment="Left" Name="TodayForecast" Visibility="Collapsed">
                     <Label Content="Hourly Forecast"/>
-                    <uc:HourlyTemperatureGraph Height="140" Width="370" SeriesCollection="{Binding Path=WindowSeriesCollection, ElementName=mainWindow}" Labels="{Binding Path=WindowLabels, ElementName=mainWindow}"/>
+                    <uc:HourlyTemperatureGraph x:Name="HourlyTemperatureGraphControl" Height="140" Width="370"/>
                 </StackPanel>
 
                 <!-- Week Days -->
