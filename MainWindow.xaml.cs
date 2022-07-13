@@ -54,6 +54,7 @@ namespace TaskbarWeather
             TBWeatherIcon.DoubleClick += new EventHandler(tbWeatherIcon_DoubleClick);
 
             //This is the data we use to create the temperature/time graph
+            //Use some default data to create the control, also may alert the user that something went wrong
             SeriesCollection Series = new SeriesCollection
             {
                 new LineSeries
@@ -77,6 +78,8 @@ namespace TaskbarWeather
                 Console.WriteLine("Missing APIKeys.cs, or missing value for one of the APIKeys");
                 ex.ToString();
             }
+
+            ReadFavouritesFromFile();
 
             WeatherAPICaller.InitializeClient();
             //Need to pass the appid to the API caller
@@ -157,6 +160,8 @@ namespace TaskbarWeather
             return new System.Windows.Point(pixelX, pixelY);
         }
 
+        #region Control Event Handlers
+
         private void textSearch_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             txtSearch.Focus();
@@ -186,6 +191,22 @@ namespace TaskbarWeather
             Favourites2.IsChecked = false;
             Favourites3.IsChecked = false;
         }
+        private void Week_Clicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            TodayForecast.Visibility = Visibility.Collapsed;
+            WeekForecast.Visibility = Visibility.Visible;
+            WeekLabel.Style = FindResource("activeTextButton") as Style;
+            TodayLabel.Style = FindResource("textButton") as Style;
+        }
+
+        private void Today_Clicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            WeekForecast.Visibility = Visibility.Collapsed;
+            TodayForecast.Visibility = Visibility.Visible;
+            TodayLabel.Style = FindResource("activeTextButton") as Style;
+            WeekLabel.Style = FindResource("textButton") as Style;
+        }
+        #endregion
 
         #region API
         /*
@@ -423,6 +444,7 @@ namespace TaskbarWeather
                 }
                 GetAllWeather(txtSearch.Text);
             }
+            SaveFavouritesToFile();
             ReplaceStarWithDelete();
 
         }
@@ -444,25 +466,59 @@ namespace TaskbarWeather
                 Favourite3 = "";
                 Favourites3.Content = "";
             }
+            SaveFavouritesToFile();
             ReplaceDeleteWithStar();
         }
+
+        private void SaveFavouritesToFile()
+        {
+            Console.WriteLine("Saving to file");
+            if (!File.Exists(@"favourites.txt"))
+            {
+                File.Create(@"favourites.txt");
+            }
+            using (StreamWriter sw = new StreamWriter(@"favourites.txt"))
+            {
+                //Null check. Shorthand for (Favourite1 != null?Favourite1 : "")
+                sw.WriteLine(Favourite1 ?? "");
+                sw.WriteLine(Favourite2 ?? "");
+                sw.WriteLine(Favourite3 ?? "");
+            }
+        }
+
+        private void ReadFavouritesFromFile()
+        {
+            Console.WriteLine("Reading from file");
+            if (!File.Exists(@"favourites.txt"))
+            {
+                File.Create(@"favourites.txt");
+            }
+
+            string[] Favourites = new string[3];
+            using (StreamReader sr = new StreamReader("favourites.txt"))
+            {
+                int i = 0;
+                string line = "";
+                while((line = sr.ReadLine()) != null)
+                {
+                    //Break out of the while loop instead of returning, to make sure the streamreader closes
+                    if (i <= Favourites.Length - 1)
+                    {
+                        Favourites[i] = line;
+                        i++;
+                    }
+                }
+            }
+            Favourite1 = Favourites[0];
+            Favourite2 = Favourites[1];
+            Favourite3 = Favourites[2];
+            Favourites1.Content = Favourite1.Length > 0 ? Favourite1[0].ToString() : "";
+            Favourites2.Content = Favourite2.Length > 0 ? Favourite2[0].ToString() : "";
+            Favourites3.Content = Favourite3.Length > 0 ? Favourite3[0].ToString() : "";
+        }
+
         #endregion
 
-        private void Week_Clicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            TodayForecast.Visibility = Visibility.Collapsed;
-            WeekForecast.Visibility = Visibility.Visible;
-            WeekLabel.Style = FindResource("activeTextButton") as Style;
-            TodayLabel.Style = FindResource("textButton") as Style;
-        }
-        
-        private void Today_Clicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            WeekForecast.Visibility = Visibility.Collapsed;
-            TodayForecast.Visibility = Visibility.Visible;
-            TodayLabel.Style = FindResource("activeTextButton") as Style;
-            WeekLabel.Style = FindResource("textButton") as Style;
-        }
 
     }
 }

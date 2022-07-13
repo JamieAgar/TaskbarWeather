@@ -91,7 +91,6 @@
                             <ColumnDefinition Width="10"/>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition Width="auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -103,15 +102,15 @@
                         </Grid.RowDefinitions>
                         
                         <!-- Weather Description -->
-                        <TextBlock x:Name="CloudinessLabel" Text="Clear Sky" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="5 0 0 5" Grid.Column="1" Grid.Row="1"/>
+                        <TextBlock x:Name="CloudinessLabel" Text="Clear Sky" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" Margin="5 0 0 5" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"/>
 
                         <!-- Wind -->
                         <TextBlock Text="Wind" FontSize="12" FontWeight="SemiBold" Margin="5 0 0 5" VerticalAlignment="Center" Grid.Column="1" Grid.Row="2" />
-                        <TextBlock x:Name="WindLabel" Text="0m/s" FontSize="12" FontWeight="Bold" Margin="5 0 0 5" VerticalAlignment="Center" Grid.Column="3" Grid.Row="2"/>
+                        <TextBlock x:Name="WindLabel" Text="0m/s" FontSize="12" FontWeight="Bold" Margin="5 0 0 5" VerticalAlignment="Center" Grid.Column="2" Grid.Row="2"/>
 
                         <!-- Humidity -->
                         <TextBlock Text="Humidity" FontSize="12" FontWeight="SemiBold" Margin="5 0 0 5" VerticalAlignment="Center" Grid.Column="1" Grid.Row="3"/>
-                        <TextBlock x:Name="HumidityLabel" Text="0%" FontSize="12" FontWeight="Bold" Margin="5 0 0 5" VerticalAlignment="Center" Grid.Column="3" Grid.Row="3"/>
+                        <TextBlock x:Name="HumidityLabel" Text="0%" FontSize="12" FontWeight="Bold" Margin="5 0 0 5" VerticalAlignment="Center" Grid.Column="2" Grid.Row="3"/>
                     </Grid>
                 </StackPanel>
             </StackPanel>
