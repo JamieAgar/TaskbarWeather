@@ -139,22 +139,6 @@
     <None Include="Resources\Icon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <Resource Include="Resources\WeatherIcons\cloud.png" />
-    <Resource Include="Resources\WeatherIcons\dir.png" />
-    <Resource Include="Resources\WeatherIcons\dislike.png" />
-    <Resource Include="Resources\WeatherIcons\explore.png" />
-    <Resource Include="Resources\WeatherIcons\happy.png" />
-    <Resource Include="Resources\WeatherIcons\like.png" />
-    <Resource Include="Resources\WeatherIcons\q1.jpg" />
-    <Resource Include="Resources\WeatherIcons\rain.png" />
-    <Resource Include="Resources\WeatherIcons\rain_cloud.png" />
-    <Resource Include="Resources\WeatherIcons\snow.png" />
-    <Resource Include="Resources\WeatherIcons\storm.png" />
-    <Resource Include="Resources\WeatherIcons\sun.png" />
-    <Resource Include="Resources\WeatherIcons\sunrise.png" />
-    <Resource Include="Resources\WeatherIcons\sunset.png" />
-    <Resource Include="Resources\WeatherIcons\sun_cloud.png" />
-    <Resource Include="Resources\WeatherIcons\water.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\delete.png" />

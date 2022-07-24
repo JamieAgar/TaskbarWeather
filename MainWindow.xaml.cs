@@ -48,7 +48,7 @@ namespace TaskbarWeather
             contextMenuStrip.Items.Add(exitMenuItem);
             TBWeatherIcon.ContextMenuStrip = contextMenuStrip;
 
-            TBWeatherIcon.Icon = new Icon(@"Resources/Icon.ico");
+            TBWeatherIcon.Icon = new Icon(@"Resources/icon.ico");
             TBWeatherIcon.Visible = true;
             TBWeatherIcon.Text = "Weather";
             TBWeatherIcon.DoubleClick += new EventHandler(tbWeatherIcon_DoubleClick);
@@ -100,7 +100,26 @@ namespace TaskbarWeather
             var coor = GetMousePositionWindowsForms();
             Show_Window(coor.X);
 
-            GetAllWeather();
+            if (Favourites1.IsChecked == true)
+            {
+                GetAllWeather(Favourite1);
+            }
+            else if (Favourites2.IsChecked == true)
+            {
+                GetAllWeather(Favourite2);
+            }
+            else if (Favourites3.IsChecked == true)
+            {
+                GetAllWeather(Favourite3);
+            }
+            else if (txtSearch.Text != "")
+            {
+                GetAllWeather(txtSearch.Text);
+            }
+            else 
+            {
+                GetAllWeather();
+            }
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
@@ -269,6 +288,7 @@ namespace TaskbarWeather
                     //Convert UNIX timestamp to DateTime
                     DateTime dateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
                     dateTime = dateTime.AddSeconds(data.ts).ToLocalTime();
+                    Console.WriteLine(dateTime.ToLocalTime());
 
                     cardDay.Day = dateTime.DayOfWeek.ToString().Substring(0, 3);
                     cardDay.MinNum = Math.Round(data.min_temp).ToString() + "°C";

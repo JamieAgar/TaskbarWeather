@@ -6,7 +6,7 @@
         xmlns:uc="clr-namespace:TaskbarWeather.UserControls"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         mc:Ignorable="d" Name="mainWindow"
-        Title="MainWindow" Height="240" Width="545" Background="Transparent" 
+        Title="MainWindow" Height="240" Width="545" AllowsTransparency="True" Background="Transparent" 
         Activated="Window_Activated"
         Deactivated="Window_Deactivated"
         ShowInTaskbar="False"
@@ -79,7 +79,7 @@
                         </Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Image x:Name="WeatherIcon" Source="/Resources/WeatherIcons/sun_cloud.png" Width="24"/>
+                        <Image x:Name="WeatherIcon" Width="24"/>
                         <TextBlock x:Name="TemperatureLabel"  Text="0" FontSize="32" HorizontalAlignment="Center"/>
                         <TextBlock Text="°C" FontSize="20" HorizontalAlignment="Center"/>
                     </StackPanel>
@@ -136,15 +136,15 @@
                 <!-- Week Days -->
                 <StackPanel HorizontalAlignment="Left" Name="WeekForecast" Visibility="Visible">
                     <StackPanel Orientation="Horizontal" Margin="10 0 0 5">
-                        <uc:CardDay x:Name="Day0" Day="Sun" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" ToolTip="Cloudy" Margin="0 0 5 0"/>
-                        <uc:CardDay x:Name="Day1" Day="Mon" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
-                        <uc:CardDay x:Name="Day2" Day="Tue" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
-                        <uc:CardDay x:Name="Day3" Day="Thu" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                        <uc:CardDay x:Name="Day0" Day="Sun" MaxNum="16°" MinNum="3°" ToolTip="Cloudy" Margin="0 0 5 0"/>
+                        <uc:CardDay x:Name="Day1" Day="Mon" MaxNum="16°" MinNum="3°" Margin="0 0 5 0"/>
+                        <uc:CardDay x:Name="Day2" Day="Tue" MaxNum="16°" MinNum="3°" Margin="0 0 5 0"/>
+                        <uc:CardDay x:Name="Day3" Day="Thu" MaxNum="16°" MinNum="3°" Margin="0 0 5 0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="10 0 0 5" HorizontalAlignment="Center">
-                        <uc:CardDay x:Name="Day4" Day="Fri" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
-                        <uc:CardDay x:Name="Day5" Day="Wed" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
-                        <uc:CardDay x:Name="Day6" Day="Sat" MaxNum="16°" MinNum="3°" Source="/Resources/WeatherIcons/cloud.png" Margin="0 0 5 0"/>
+                        <uc:CardDay x:Name="Day4" Day="Fri" MaxNum="16°" MinNum="3°" Margin="0 0 5 0"/>
+                        <uc:CardDay x:Name="Day5" Day="Wed" MaxNum="16°" MinNum="3°" Margin="0 0 5 0"/>
+                        <uc:CardDay x:Name="Day6" Day="Sat" MaxNum="16°" MinNum="3°" Margin="0 0 5 0"/>
                     </StackPanel>
                 </StackPanel>
 
